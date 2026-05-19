@@ -12,7 +12,8 @@ export default function ProductCard({ product, onView, onAdd }) {
       className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group border border-gray-100"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-    >
+      onClick={() => onView(product)}
+>
       {/* Imagem */}
       <div className="relative overflow-hidden bg-gray-50 aspect-square">
         <img
@@ -37,7 +38,7 @@ export default function ProductCard({ product, onView, onAdd }) {
       </div>
 
       {/* Info */}
-      <div className="p-4" onClick={() => onView(product)}>
+      <div className="p-4">
         <p className="text-xs text-blue-600 font-medium mb-1">{product.category}</p>
         <h3 className="font-semibold text-gray-800 text-sm mb-1 truncate">{product.name}</h3>
         <div className="flex items-center gap-1.5 mb-2">

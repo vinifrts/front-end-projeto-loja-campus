@@ -139,7 +139,7 @@ const PRODUCTS = [
     price: 19.9,
     category: "Papelaria",
     description:
-      "Chaveiro metálico com o logo Unifor em alto relevo. Acabamento premium.",
+       "Chaveiro metálico com o logo Unifor em alto relevo. Acabamento premium.",
     image: "chaveiro-unifor.png",
     sizes: ["Único"],
     rating: 4.4,
