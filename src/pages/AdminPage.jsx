@@ -2,6 +2,7 @@ import { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import AdminStats from "../components/admin/AdminStats";
 import { ProductsTable, OrdersTable } from "../components/admin/AdminTable";
+import AddProductModal from "../components/admin/AddProductModal";
 import { PlusIcon } from "../components/Icons";
 import PRODUCTS from "../data/Products";
 import CATEGORIES from "../data/Categories";
@@ -25,6 +26,8 @@ const CATEGORY_BARS = [
 export default function AdminPage({ setPage }) {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   /* Acesso negado */
   if (!user || user.role !== "admin") {
@@ -131,13 +134,22 @@ export default function AdminPage({ setPage }) {
         <div>
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm text-gray-500">{PRODUCTS.length} produtos cadastrados</p>
-            <button className="bg-blue-900 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-blue-900 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2"
+            >
               <PlusIcon /> Novo Produto
             </button>
           </div>
           <ProductsTable products={PRODUCTS} />
         </div>
       )}
+
+      {/* Add Product Modal */}
+      <AddProductModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
 
       {/* ── Pedidos */}
       {activeTab === "pedidos" && <OrdersTable />}
