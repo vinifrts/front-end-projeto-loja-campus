@@ -1,10 +1,10 @@
 import CATEGORIES from "../data/Categories";
 
 const STATS = [
-  ["Estudantes Atendidos", "2.400+"],
-  ["Avaliação Média",       "4.8/5"],
-  ["Produtos",              "16+"],
-  ["Anos de Projeto",       "3"],
+  ["", "Estudantes Atendidos", "2.400+"],
+  ["", "Avaliação Média",       "4.8/5"],
+  ["", "Produtos",              "16+"],
+  ["", "Anos de Projeto",       "3"],
 ];
 
 export default function SobrePage({ setPage }) {

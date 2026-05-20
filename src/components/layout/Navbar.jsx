@@ -40,17 +40,31 @@ export default function Navbar({ setPage, currentPage }) {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
 
+          
           {/* Logo */}
-          <button onClick={() => nav("home")} className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-900 rounded-lg flex items-center justify-center">
-              <span className="text-white font-black text-sm">L</span>
-            </div>
-            <div className="hidden sm:block">
-              <span className="font-black text-blue-900 text-lg leading-none">Lojinha</span>
-              <span className="text-blue-500 font-black text-lg leading-none"> Campus</span>
-              <div className="text-xs text-gray-400 font-medium leading-none">Unifor</div>
-            </div>
-          </button>
+<button onClick={() => nav("home")} className="flex items-center gap-2">
+  <div className="w-26 h-20 overflow-hidden flex items-center justify-center">
+  <img
+    src="/lgunifor-azul.png"
+    alt="Unifor"
+    className="h-20 w-auto object-contain scale-110"
+  />
+</div>
+
+  <div className="hidden sm:block">
+    <span className="font-black text-blue-900 text-lg leading-none">
+      Lojinha
+    </span>
+
+    <span className="text-blue-500 font-black text-lg leading-none">
+      {" "}Campus
+    </span>
+
+    <div className="text-xs text-gray-400 font-medium leading-none">
+      Unifor
+    </div>
+  </div>
+</button>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
