@@ -54,6 +54,19 @@ const PRODUCTS = [
   },
   {
     id: 5,
+    name: "Camisa Nutrição",
+    price: 69.9,
+    category: "Camisas",
+    description:
+      "Camisa oficial do curso de Nutrição da Unifor",
+    image: "camisa-nutricao.jpg",
+    sizes: ["P", "M", "G", "GG", "XGG"],
+    rating: 4.6,
+    reviews: 91,
+    badge: null,
+  },
+  {
+    id: 5,
     name: "Moletom Unifor Clássico",
     price: 179.9,
     category: "Moletons",
