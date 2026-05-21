@@ -1,6 +1,4 @@
-/**
- * Serviço de autenticação mock, substituir por chamadas reais à API quando implementar o backend.
- */
+
 
 export const ADMIN_CREDENTIALS = {
   email: "admin@unifor.br",
