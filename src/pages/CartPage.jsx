@@ -15,7 +15,7 @@ export default function CartPage({ setPage }) {
   if (checkout) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <div className="text-7xl mb-6">🎉</div>
+        <div className="text-7xl mb-6"></div>
         <h2 className="text-3xl font-black text-gray-800 mb-3">Pedido Confirmado!</h2>
         <p className="text-gray-500 mb-2">Seu pedido foi realizado com sucesso.</p>
         <p className="text-gray-400 text-sm mb-8">
