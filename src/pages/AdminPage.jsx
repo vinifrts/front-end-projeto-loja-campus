@@ -7,7 +7,6 @@ import { PlusIcon } from "../components/Icons";
 import PRODUCTS from "../data/Products";
 import CATEGORIES from "../data/Categories";
 
-
 const TABS = [
   ["dashboard", "Dashboard"],
   ["produtos",  "Produtos"],
