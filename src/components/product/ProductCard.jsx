@@ -48,12 +48,12 @@ export default function ProductCard({ product, onView, onAdd }) {
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold text-blue-900">{formatPrice(product.price)}</span>
           <div className="flex gap-1">
-            {product.sizes.slice(0, 3).map((s) => (
+            {product.sizes?.slice(0, 3).map((s) => (
               <span key={s} className="text-xs border border-gray-200 rounded px-1.5 py-0.5 text-gray-500">
                 {s}
               </span>
             ))}
-            {product.sizes.length > 3 && (
+            {product.sizes?.length > 3 && (
               <span className="text-xs text-gray-400">+{product.sizes.length - 3}</span>
             )}
           </div>

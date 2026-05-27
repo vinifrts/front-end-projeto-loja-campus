@@ -1,5 +1,5 @@
 const BASE_URL =
-  import.meta.env.VITE_API_URL || "";
+  import.meta.env.VITE_API_URL;
 
 export async function apiFetch(
   endpoint,
@@ -9,21 +9,16 @@ export async function apiFetch(
   const token =
     localStorage.getItem("token");
 
-  const res = await fetch(
+  const response = await fetch(
     `${BASE_URL}${endpoint}`,
     {
-
       headers: {
+        "Content-Type": "application/json",
 
-        "Content-Type":
-          "application/json",
-
-        Accept:
-          "application/json",
+        Accept: "application/json",
 
         ...(token && {
-          Authorization:
-            `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         }),
       },
 
@@ -31,17 +26,19 @@ export async function apiFetch(
     }
   );
 
-  const data =
-    await res.json();
+  const data = await response.json();
 
-  if (!res.ok) {
+  if (!response.ok) {
 
-    throw {
+    const error = new Error(
+      data.message || "Erro na API"
+    );
 
-      status: res.status,
+    error.data = data;
 
-      data,
-    };
+    error.status = response.status;
+
+    throw error;
   }
 
   return data;

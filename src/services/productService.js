@@ -1,39 +1,43 @@
-import PRODUCTS from "../data/Products";
+import { apiFetch } from "./api";
 
-/**
- * retorna todos os produtos.
- * @returns {Array}
- */
-export function getAllProducts() {
-  return PRODUCTS;
+export async function getProducts(params = {}) {
+  const query = new URLSearchParams(params).toString();
+
+  const response = await apiFetch(
+    `/products${query ? `?${query}` : ""}`
+  );
+
+  return response.data || [];
 }
 
-/**
- * Busca produto pelo ID.
- * @param {number} id
- * @returns {object|undefined}
- */
-export function getProductById(id) {
-  return PRODUCTS.find((p) => p.id === Number(id));
+export async function getFeaturedProducts(limit = 4) {
+  const response = await apiFetch("/products");
+
+  const products = response.data || [];
+
+  return products.slice(0, limit);
 }
 
-/**
- * Retorna produtos de destaque (que possuem badge).
- * @param {number} limit
- * @returns {Array}
- */
-export function getFeaturedProducts(limit = 4) {
-  return PRODUCTS.filter((p) => p.badge).slice(0, limit);
+export async function getCategories() {
+  const response = await apiFetch("/categories");
+
+  return response.data || [];
 }
 
-/**
- * Retorna produtos relacionados (mesma categoria, excluindo o atual).
- * @param {object} product
- * @param {number} limit
- * @returns {Array}
- */
-export function getRelatedProducts(product, limit = 4) {
-  return PRODUCTS.filter(
-    (p) => p.category === product.category && p.id !== product.id
-  ).slice(0, limit);
+export function getRelatedProducts(
+  currentProduct,
+  allProducts = [],
+  limit = 4
+) {
+  if (!currentProduct) {
+    return [];
+  }
+
+  return allProducts
+    .filter(
+      (p) =>
+        p.id !== currentProduct.id &&
+        p.category === currentProduct.category
+    )
+    .slice(0, limit);
 }
