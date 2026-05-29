@@ -108,24 +108,21 @@ export default function HomePage({
             </div>
           </div>
           <div className="hidden md:grid grid-cols-2 gap-4">
-            {featured.slice(0, 4).map((p, i) => (
+            {featured.slice(0, 4).map((p) => (
               <div
                 key={p.id}
-                className={`bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 ${i % 2 === 1 ? "mt-8" : ""
-                  }`}
+                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4"
               >
                 <img
                   src={p.image}
                   alt={p.name}
-                  className="w-full aspect-square object-cover rounded-xl mb-3 opacity-90"
+                  className="w-full aspect-square object-cover rounded-xl mb-3"
                 />
                 <p className="text-white text-xs font-semibold truncate">
                   {p.name}
                 </p>
                 <p className="text-blue-300 text-xs">
-                  R$ {Number(p.price)
-                    .toFixed(2)
-                    .replace(".", ",")}
+                  R$ {Number(p.price).toFixed(2).replace(".", ",")}
                 </p>
               </div>
             ))}
