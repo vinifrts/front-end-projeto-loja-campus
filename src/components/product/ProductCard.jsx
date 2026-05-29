@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { HeartIcon } from "../Icons";
 import Badge from "./Badge";
-import Stars from "./Stars";
 import { formatPrice } from "../../utils/formatPrice";
 
 export default function ProductCard({ product, onView, onAdd }) {
@@ -32,19 +30,12 @@ export default function ProductCard({ product, onView, onAdd }) {
         >
           + Adicionar
         </button>
-        <button className="absolute top-3 right-3 bg-white rounded-full p-1.5 shadow text-gray-400 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100">
-          <HeartIcon />
-        </button>
       </div>
 
       {/* Info */}
       <div className="p-4">
         <p className="text-xs text-blue-600 font-medium mb-1">{product.category}</p>
         <h3 className="font-semibold text-gray-800 text-sm mb-1 truncate">{product.name}</h3>
-        <div className="flex items-center gap-1.5 mb-2">
-          <Stars rating={product.rating} />
-          <span className="text-xs text-gray-400">({product.reviews})</span>
-        </div>
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold text-blue-900">{formatPrice(product.price)}</span>
           <div className="flex gap-1">

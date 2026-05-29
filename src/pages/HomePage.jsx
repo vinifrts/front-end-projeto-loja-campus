@@ -6,7 +6,6 @@ import {
   ChevronRightIcon,
   TruckIcon,
   ShieldIcon,
-  HeartIcon,
   CheckIcon
 } from "../components/Icons";
 
@@ -18,7 +17,6 @@ import {
 const FEATURES = [
   [TruckIcon, "Entrega no Campus", "1 a 3 dias úteis"],
   [ShieldIcon, "Produto Oficial", "Garantia Unifor"],
-  [HeartIcon, "Feito com Amor", "Por alunos, para alunos"],
   [CheckIcon, "Qualidade Premium", "Materiais selecionados"],
 ];
 

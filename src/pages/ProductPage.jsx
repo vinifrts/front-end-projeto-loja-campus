@@ -7,7 +7,6 @@ import useCart from "../hooks/useCart";
 
 import ProductCard from "../components/product/ProductCard";
 import Badge from "../components/product/Badge";
-import Stars from "../components/product/Stars";
 
 import {
   PlusIcon,
@@ -55,7 +54,6 @@ export default function ProductPage({
 
   const loadRelated =
     async () => {
-
       const data =
         await getRelatedProducts(
           product,
@@ -66,14 +64,11 @@ export default function ProductPage({
     };
 
   if (!product) {
-
     setPage("produtos");
-
     return null;
   }
 
   const handleAdd = () => {
-
     add(
       product,
       size,
@@ -89,15 +84,12 @@ export default function ProductPage({
 
   const handleViewRelated =
     (prod) => {
-
       setSelectedProduct(prod);
-
       window.scrollTo(0, 0);
     };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-
       <button
         onClick={() =>
           setPage("produtos")
@@ -106,67 +98,32 @@ export default function ProductPage({
       >
         ← Voltar aos produtos
       </button>
-
       <div className="grid md:grid-cols-2 gap-10 mb-16">
-
-        {/* Imagem */}
         <div className="bg-gray-50 rounded-3xl overflow-hidden aspect-square">
-
           <img
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover"
           />
-
         </div>
-
-        {/* Detalhes */}
         <div className="flex flex-col justify-between">
-
           <div>
-
             <div className="flex items-center gap-2 mb-2">
-
               <span className="text-blue-600 text-sm font-medium bg-blue-50 px-3 py-1 rounded-full">
                 {product.category}
               </span>
-
               {product.badge && (
                 <Badge
                   text={product.badge}
                 />
               )}
-
             </div>
-
             <h1 className="text-3xl font-black text-gray-800 mb-3">
               {product.name}
             </h1>
-
-            <div className="flex items-center gap-2 mb-4">
-
-              <Stars
-                rating={
-                  product.rating || 5
-                }
-              />
-
-              <span className="text-sm text-gray-500">
-                {product.rating || 5}
-                {" "}
-                (
-                {product.reviews || 0}
-                {" "}
-                avaliações)
-              </span>
-
-            </div>
-
             <p className="text-gray-500 leading-relaxed mb-6">
               {product.description}
             </p>
-
-            {/* Tamanhos */}
             {product.sizes?.[0] !==
               "Único" && (
 
