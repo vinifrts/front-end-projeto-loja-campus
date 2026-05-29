@@ -1,25 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useAuth from "../hooks/useAuth";
 import AdminStats from "../components/admin/AdminStats";
 import { ProductsTable, OrdersTable } from "../components/admin/AdminTable";
 import AddProductModal from "../components/admin/AddProductModal";
-import { PlusIcon } from "../components/Icons";
-import PRODUCTS from "../data/Products";
-import CATEGORIES from "../data/Categories";
+import { apiFetch } from "../services/api";
 
 const TABS = [
   ["dashboard", "Dashboard"],
-  ["produtos",  "Produtos"],
-  ["pedidos",   "Pedidos"],
-];
-
-const CATEGORY_BARS = [
-  ["Camisas",   65],
-  ["Moletons",  48],
-  ["Mochilas",  31],
-  ["Garrafas",  28],
-  ["Bonés",     19],
-  ["Papelaria", 16],
+  ["produtos", "Produtos"],
+  ["pedidos", "Pedidos"],
 ];
 
 export default function AdminPage({ setPage }) {
@@ -27,13 +16,79 @@ export default function AdminPage({ setPage }) {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Estados para dados da API
+  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
 
-  /* Acesso negado */
-  if (!user || user.role !== "admin") {
+  // Busca os produtos tratando qualquer formato de retorno do Laravel
+  const fetchProducts = useCallback(async () => {
+    try {
+      const response = await apiFetch("/products", { method: "GET" });
+      
+      let productList = [];
+      // Mapeia flexivelmente se vier array direto, .data, .data.data ou chave .products
+      if (Array.isArray(response)) {
+        productList = response;
+      } else if (response && Array.isArray(response.data)) {
+        productList = response.data;
+      } else if (response && response.data && Array.isArray(response.data.data)) {
+        productList = response.data.data;
+      } else if (response && response.products) {
+        productList = response.products;
+      }
+
+      setProducts(productList);
+    } catch (error) {
+      console.error("Erro ao carregar produtos na administração:", error);
+    }
+  }, []);
+
+  // Busca todos os pedidos tratando qualquer formato de retorno do Laravel
+  const fetchOrders = useCallback(async () => {
+    try {
+      const response = await apiFetch("/orders", { method: "GET" });
+      
+      let orderList = [];
+      if (Array.isArray(response)) {
+        orderList = response;
+      } else if (response && Array.isArray(response.data)) {
+        orderList = response.data;
+      } else if (response && response.data && Array.isArray(response.data.data)) {
+        orderList = response.data.data;
+      }
+
+      setOrders(orderList);
+    } catch (error) {
+      console.error("Erro ao carregar pedidos na administração:", error);
+    }
+  }, []);
+
+  // Monitora a troca de abas para carregar apenas o necessário
+  useEffect(() => {
+    if (!user || user.access_level !== "docente") return;
+
+    if (activeTab === "produtos" || activeTab === "dashboard") {
+      fetchProducts();
+    }
+    if (activeTab === "pedidos" || activeTab === "dashboard") {
+      fetchOrders();
+    }
+  }, [activeTab, user, fetchProducts, fetchOrders]);
+
+  // Função disparada pelo Modal quando um produto é salvo com sucesso no Laravel
+  const handleProductAdded = async (newProduct) => {
+    // Força uma busca limpa e fresca direto do banco de dados sincronizando a tabela
+    await fetchProducts();
+    setIsModalOpen(false); // Fecha o modal com segurança após a atualização
+  };
+
+  /* 🔒 Proteção de Acesso Restrito baseada no nível de acesso (docente) */
+  if (!user || user.access_level !== "docente") {
     return (
       <div className="text-center py-20">
         <div className="text-5xl mb-4">🔒</div>
         <h2 className="text-2xl font-bold text-gray-700 mb-4">Acesso Restrito</h2>
+        <p className="text-gray-400 mb-6 text-sm">Este painel é exclusivo para usuários com nível de Docente.</p>
         <button
           onClick={() => setPage("login")}
           className="bg-blue-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-colors"
@@ -78,80 +133,56 @@ export default function AdminPage({ setPage }) {
         ))}
       </div>
 
-      {/* Dashboard */}
+      {/* ABA 1: DASHBOARD */}
       {activeTab === "dashboard" && (
         <div>
-          <AdminStats />
-          <div className="grid md:grid-cols-2 gap-6">
+          <AdminStats products={products} orders={orders} />
 
-            {/* Mais Vendidos */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-black text-gray-800 mb-4">Mais Vendidos</h3>
-              <div className="space-y-3">
-                {PRODUCTS.filter((p) => p.badge).map((p, i) => (
-                  <div key={p.id} className="flex items-center gap-3">
-                    <span className="text-lg font-black text-gray-300 w-5">#{i + 1}</span>
-                    <img src={p.image} alt={p.name} className="w-10 h-10 rounded-lg object-cover bg-gray-50" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-700 truncate">{p.name}</p>
-                      <p className="text-xs text-gray-400">{p.reviews} avaliações</p>
-                    </div>
-                    <span className="text-sm font-bold text-blue-900">
-                      R$ {p.price.toFixed(2).replace(".", ",")}
-                    </span>
-                  </div>
-                ))}
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+            <div>
+              <h3 className="text-lg font-bold text-gray-700 mb-4">Últimos Produtos</h3>
+              <ProductsTable products={products.slice(0, 5)} />
             </div>
-
-            {/* Vendas por Categoria */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-black text-gray-800 mb-4">Vendas por Categoria</h3>
-              <div className="space-y-3">
-                {CATEGORY_BARS.map(([cat, pct]) => (
-                  <div key={cat}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600 font-medium">{cat}</span>
-                      <span className="text-gray-400">{pct}%</span>
-                    </div>
-                    <div className="w-full bg-gray-100 rounded-full h-2">
-                      <div
-                        className="bg-blue-700 h-2 rounded-full transition-all"
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-700 mb-4">Últimos Pedidos</h3>
+              <OrdersTable orders={orders.slice(0, 5)} />
             </div>
           </div>
         </div>
       )}
 
-      
+      {/* ABA 2: PRODUTOS */}
       {activeTab === "produtos" && (
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-gray-500">{PRODUCTS.length} produtos cadastrados</p>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-gray-700">Todos os Produtos</h2>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-blue-900 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2"
+              className="bg-blue-900 hover:bg-blue-800 text-white font-bold px-4 py-2 rounded-xl text-sm transition-colors flex items-center gap-2"
             >
-              <PlusIcon /> Novo Produto
+              + Adicionar Produto
             </button>
           </div>
-          <ProductsTable products={PRODUCTS} />
+          <ProductsTable products={products} />
         </div>
       )}
 
-      {/* Add Product Modal */}
-      <AddProductModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {/* ABA 3: PEDIDOS */}
+      {activeTab === "pedidos" && (
+        <div>
+          <h2 className="text-xl font-bold text-gray-700 mb-4">Gerenciamento de Pedidos</h2>
+          <OrdersTable orders={orders} />
+        </div>
+      )}
 
-      {/* ── Pedidos */}
-      {activeTab === "pedidos" && <OrdersTable />}
+      {/* RENDERIZAÇÃO DO MODAL */}
+      {isModalOpen && (
+        <AddProductModal
+          onClose={() => setIsModalOpen(false)}
+          onProductAdded={handleProductAdded}
+        />
+      )}
+
     </div>
   );
 }

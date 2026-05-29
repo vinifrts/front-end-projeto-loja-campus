@@ -25,24 +25,30 @@ export default function Footer({ setPage }) {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center">
-                <span className="font-black text-white">L</span>
+              {/* Box da logo integrado com a identidade visual */}
+              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center overflow-hidden border border-white/10">
+                <img src="/lgunifor-azul.png" alt="Unifor Logo" className="h-7 w-auto object-contain brightness-0 invert" />
               </div>
               <div>
-                <span className="font-black text-xl">Lojinha do </span>
-                <span className="font-black text-xl text-blue-400"> Campus</span>
-                <div className="text-xs text-blue-300">Universidade de Fortaleza</div>
+                <div className="flex items-center gap-1 leading-none">
+                  <span className="font-black text-lg text-white">Lojinha</span>
+                  <span className="font-black text-lg text-blue-400">Campus</span>
+                </div>
+                <div className="text-[10px] text-blue-300 font-medium tracking-wide uppercase mt-0.5">Universidade de Fortaleza</div>
               </div>
             </div>
+            
+            {/* Correção gramatical realizada aqui: "no próprio campus" */}
             <p className="text-blue-200 text-sm leading-relaxed max-w-xs">
               A loja oficial da Unifor. Produtos com identidade universitária,
-              qualidade premium e entrega na própria campus.
+              qualidade premium e entrega no próprio campus.
             </p>
+            
             <div className="flex gap-3 mt-5">
               {SOCIAL_ICONS.map((Icon, i) => (
                 <button
                   key={i}
-                  className="w-9 h-9 bg-blue-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors"
+                  className="w-9 h-9 bg-blue-900/50 hover:bg-blue-600 border border-white/5 text-blue-200 hover:text-white rounded-full flex items-center justify-center transition-colors"
                 >
                   <Icon />
                 </button>
@@ -52,15 +58,15 @@ export default function Footer({ setPage }) {
 
           {/* Loja */}
           <div>
-            <h4 className="font-semibold mb-4 text-blue-300 text-sm uppercase tracking-wider">
+            <h4 className="font-bold mb-4 text-blue-400 text-xs uppercase tracking-wider">
               Loja
             </h4>
-            <ul className="space-y-2 text-sm text-blue-200">
+            <ul className="space-y-2 text-sm text-blue-200/80">
               {LOJA_LINKS.map(([label, page]) => (
                 <li key={label}>
                   <button
                     onClick={() => setPage(page)}
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white transition-colors text-left"
                   >
                     {label}
                   </button>
@@ -71,30 +77,30 @@ export default function Footer({ setPage }) {
 
           {/* Suporte */}
           <div>
-            <h4 className="font-semibold mb-4 text-blue-300 text-sm uppercase tracking-wider">
+            <h4 className="font-bold mb-4 text-blue-400 text-xs uppercase tracking-wider">
               Suporte
             </h4>
-            <ul className="space-y-2 text-sm text-blue-200">
+            <ul className="space-y-2 text-sm text-blue-200/80 mb-5">
               {SUPORTE_LINKS.map((label) => (
                 <li key={label}>
-                  <button className="hover:text-white transition-colors">{label}</button>
+                  <button className="hover:text-white transition-colors text-left">{label}</button>
                 </li>
               ))}
             </ul>
-            <div className="mt-5 p-3 bg-blue-900 rounded-xl text-xs text-blue-300">
+            <div className="p-3 bg-blue-900/40 border border-white/5 rounded-xl text-xs text-blue-300">
               <div className="font-semibold text-white mb-1">📍 Retirada no Campus</div>
               <div>Segundo andar do Centro de Convivência</div>
-              <div>Seg–Sex: 8h–22h</div>
+              <div className="opacity-75 mt-0.5">Seg–Sex: 8h–22h</div>
             </div>
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-blue-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-blue-400">
+        <div className="border-t border-blue-900 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-blue-400/60">
           <span>© 2026 Lojinha Campus Unifor. Todos os direitos reservados.</span>
           <div className="flex gap-4">
-            <button className="hover:text-white transition-colors">Privacidade</button>
-            <button className="hover:text-white transition-colors">Termos de Uso</button>
+            <button className="hover:text-blue-300 transition-colors">Privacidade</button>
+            <button className="hover:text-blue-300 transition-colors">Termos de Uso</button>
           </div>
         </div>
       </div>

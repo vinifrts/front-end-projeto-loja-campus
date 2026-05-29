@@ -3,19 +3,45 @@ import useCart from "../hooks/useCart";
 import { TrashIcon, PlusIcon, MinusIcon } from "../components/Icons";
 import { formatPrice } from "../utils/formatPrice";
 import { calcShipping } from "../utils/helpers";
-import { generateOrderId } from "../utils/helpers";
-import CATEGORIES from "../data/Categories";
+import { createCheckout } from "../services/orderService";
 
 export default function CartPage({ setPage }) {
-  const { items, remove, update, total, clear } = useCart();
-  const [checkout, setCheckout] = useState(false);
-  const [orderId]  = useState(generateOrderId);
+  const { items, remove, update, total, clear, loadingCart } = useCart();
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+  const [backendOrderId, setBackendOrderId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Confirmação 
-  if (checkout) {
+  const [deliveryType, setDeliveryType] = useState("retirada");
+  const [paymentType, setPaymentType] = useState("pix");
+
+  const handleFinalizeOrder = async () => {
+    setLoading(true);
+    setErrorMessage("");
+    try {
+      // Enviamos mapeado exatamente com os nomes que o Laravel espera no Request
+      const response = await createCheckout({
+        type_delivery: deliveryType,
+        type_payment: paymentType
+      });
+
+      if (response.success) {
+        setBackendOrderId(response.data.id);
+        setCheckoutSuccess(true);
+        // O clear() local/remoto limpa os estados do carrinho pós-venda
+        clear(); 
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(error.response?.data?.message || error.message || "Erro ao processar o pedido. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (checkoutSuccess) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <div className="text-7xl mb-6"></div>
         <h2 className="text-3xl font-black text-gray-800 mb-3">Pedido Confirmado!</h2>
         <p className="text-gray-500 mb-2">Seu pedido foi realizado com sucesso.</p>
         <p className="text-gray-400 text-sm mb-8">
@@ -25,10 +51,10 @@ export default function CartPage({ setPage }) {
           <p className="text-xs text-blue-500 font-semibold uppercase tracking-wider mb-1">
             Número do Pedido
           </p>
-          <p className="text-2xl font-black text-blue-900">{orderId}</p>
+          <p className="text-2xl font-black text-blue-900">#{backendOrderId}</p>
         </div>
         <button
-          onClick={() => { clear(); setPage("home"); }}
+          onClick={() => setPage("home")}
           className="bg-blue-900 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-xl transition-colors"
         >
           Voltar à Loja
@@ -37,7 +63,14 @@ export default function CartPage({ setPage }) {
     );
   }
 
-  // Carrinho vazio
+  if (loadingCart) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center text-gray-500">
+        Carregando carrinho...
+      </div>
+    );
+  }
+
   if (items.length === 0) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
@@ -56,7 +89,6 @@ export default function CartPage({ setPage }) {
 
   const shipping = calcShipping(total);
 
-  // Carrinho com itens
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-gray-800 mb-8">Carrinho</h1>
@@ -67,7 +99,7 @@ export default function CartPage({ setPage }) {
           {items.map((item) => (
             <div key={item.key} className="bg-white border border-gray-100 rounded-2xl p-4 flex gap-4 items-center shadow-sm">
               <img
-                src={item.image}
+                src={item.image || "https://placehold.co/150"}
                 alt={item.name}
                 className="w-20 h-20 object-cover rounded-xl flex-shrink-0 bg-gray-50"
               />
@@ -79,29 +111,64 @@ export default function CartPage({ setPage }) {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => update(item.key, item.qty - 1)}
-                  className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center hover:border-blue-400 transition-colors"
+                  disabled={loading}
+                  className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center hover:border-blue-400 transition-colors disabled:opacity-50"
                 >
                   <MinusIcon />
                 </button>
                 <span className="w-6 text-center font-bold text-sm">{item.qty}</span>
                 <button
                   onClick={() => update(item.key, item.qty + 1)}
-                  className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center hover:border-blue-400 transition-colors"
+                  disabled={loading}
+                  className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center hover:border-blue-400 transition-colors disabled:opacity-50"
                 >
                   <PlusIcon />
                 </button>
               </div>
               <button
                 onClick={() => remove(item.key)}
-                className="text-red-400 hover:text-red-600 p-2 transition-colors flex-shrink-0"
+                disabled={loading}
+                className="text-red-400 hover:text-red-600 p-2 transition-colors flex-shrink-0 disabled:opacity-50"
               >
                 <TrashIcon />
               </button>
             </div>
           ))}
+
+          {/* Opções de Entrega e Pagamento */}
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4">
+            <h3 className="font-bold text-gray-800 text-md">Opções de Envio e Pagamento</h3>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Forma de Entrega</label>
+                <select
+                  value={deliveryType}
+                  onChange={(e) => setDeliveryType(e.target.value)}
+                  className="w-full p-2 border border-gray-200 rounded-xl text-sm bg-gray-50"
+                >
+                  <option value="retirada">Retirada no Campus (Bloco S1)</option>
+                  <option value="delivery">Entrega (Delivery)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Forma de Pagamento</label>
+                <select
+                  value={paymentType}
+                  onChange={(e) => setPaymentType(e.target.value)}
+                  className="w-full p-2 border border-gray-200 rounded-xl text-sm bg-gray-50"
+                >
+                  <option value="pix">Pix</option>
+                  <option value="cartao">Cartão</option>
+                  <option value="boleto">Boleto Bancário</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Resumo */}
+        {/* Resumo lateral */}
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm h-fit sticky top-24">
           <h2 className="font-black text-gray-800 mb-5 text-lg">Resumo do Pedido</h2>
           <div className="space-y-3 text-sm mb-5">
@@ -125,14 +192,24 @@ export default function CartPage({ setPage }) {
               <span>{formatPrice(total + shipping)}</span>
             </div>
           </div>
+
+          {errorMessage && (
+            <div className="bg-red-50 text-red-600 text-xs p-3 rounded-xl mb-3 font-semibold">
+              {errorMessage}
+            </div>
+          )}
+
           <button
-            onClick={() => setCheckout(true)}
-            className="w-full bg-blue-900 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-colors shadow-lg mb-3"
+            onClick={handleFinalizeOrder}
+            disabled={loading}
+            className="w-full bg-blue-900 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-4 rounded-xl transition-colors shadow-lg mb-3 flex justify-center items-center"
           >
-            Finalizar Pedido
+            {loading ? "Processando..." : "Finalizar Pedido"}
           </button>
+
           <button
             onClick={() => setPage("produtos")}
+            disabled={loading}
             className="w-full border border-gray-200 text-gray-600 font-semibold py-3 rounded-xl hover:bg-gray-50 transition-colors text-sm"
           >
             Continuar Comprando

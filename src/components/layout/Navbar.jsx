@@ -94,7 +94,7 @@ export default function Navbar({ setPage, currentPage }) {
 
             {user ? (
               <div className="hidden md:flex items-center gap-2">
-                {user.role === "admin" && (
+                {user && user.access_level === "docente" && (
                   <button
                     onClick={() => nav("admin")}
                     className="flex items-center gap-1 text-xs font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-full transition-colors"
@@ -158,7 +158,7 @@ export default function Navbar({ setPage, currentPage }) {
             ))}
             {user ? (
               <>
-                {user.role === "admin" && (
+                {user && user.access_level === "docente" && (
                   <button
                     onClick={() => nav("admin")}
                     className="block w-full text-left px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-50 rounded-lg"
