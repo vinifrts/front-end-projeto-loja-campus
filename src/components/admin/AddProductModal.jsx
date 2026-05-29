@@ -16,17 +16,14 @@ export default function AddProductModal({ onClose = () => {}, onProductAdded = (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Busca as categorias do banco de dados
   useEffect(() => {
     async function loadCategories() {
       try {
         const response = await apiFetch("/categories", { method: "GET" });
-        // Se a resposta vier envelopada em .data, usamos, senão usamos a resposta direta
         const catList = response.data || response;
         
         if (Array.isArray(catList)) {
           setCategories(catList);
-          // GARANTIA: Define explicitamente a primeira categoria como padrão se o estado estiver vazio
           if (catList.length > 0) {
             setFormData((prev) => ({ ...prev, category_id: String(catList[0].id) }));
           }
@@ -54,7 +51,6 @@ export default function AddProductModal({ onClose = () => {}, onProductAdded = (
     setLoading(true);
     setError(null);
 
-    // BLINDAGEM EXTRA: Captura os valores direto do HTML do formulário para evitar falha de sincronização de estado
     const formEl = e.target;
     const nameValue = formEl.elements.name.value;
     const priceValue = formEl.elements.price.value;
@@ -62,16 +58,6 @@ export default function AddProductModal({ onClose = () => {}, onProductAdded = (
     const categoryIdValue = formEl.elements.category_id.value;
     const descShortValue = formEl.elements.description_short.value;
     const descLongValue = formEl.elements.description_long.value;
-
-    // Console log para você inspecionar no navegador ANTES de enviar se os dados existem de verdade
-    console.log("Dados coletados para envio:", {
-      name: nameValue,
-      price: priceValue,
-      stock: stockValue,
-      category_id: categoryIdValue,
-      description_short: descShortValue,
-      description_long: descLongValue
-    });
 
     try {
       const data = new FormData();
@@ -88,7 +74,7 @@ export default function AddProductModal({ onClose = () => {}, onProductAdded = (
 
       const response = await apiFetch("/products", {
         method: "POST",
-        body: data, // Envia o FormData tratado
+        body: data,
       });
 
       const newProduct = response.data || response;
@@ -96,7 +82,6 @@ export default function AddProductModal({ onClose = () => {}, onProductAdded = (
       onClose();
     } catch (err) {
       console.error("Erro ao cadastrar produto:", err);
-      // Exibe os erros detalhados retornados pelo Laravel na tela se existirem
       if (err.data && err.data.errors) {
         const msgErro = Object.values(err.data.errors).flat().join(" ");
         setError(msgErro);

@@ -7,6 +7,6 @@ import { apiFetch } from "./api";
 export async function createCheckout(checkoutData) {
   return await apiFetch("/orders/checkout", {
     method: "POST",
-    body: JSON.stringify(checkoutData), // Já envia o objeto com type_delivery e type_payment
+    body: JSON.stringify(checkoutData),
   });
 }

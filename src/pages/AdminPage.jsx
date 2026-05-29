@@ -16,17 +16,13 @@ export default function AdminPage({ setPage }) {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Estados para dados da API
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-
-  // Busca os produtos tratando qualquer formato de retorno do Laravel
   const fetchProducts = useCallback(async () => {
     try {
       const response = await apiFetch("/products", { method: "GET" });
-      
+
       let productList = [];
-      // Mapeia flexivelmente se vier array direto, .data, .data.data ou chave .products
       if (Array.isArray(response)) {
         productList = response;
       } else if (response && Array.isArray(response.data)) {
@@ -43,11 +39,10 @@ export default function AdminPage({ setPage }) {
     }
   }, []);
 
-  // Busca todos os pedidos tratando qualquer formato de retorno do Laravel
   const fetchOrders = useCallback(async () => {
     try {
       const response = await apiFetch("/orders", { method: "GET" });
-      
+
       let orderList = [];
       if (Array.isArray(response)) {
         orderList = response;
@@ -63,7 +58,6 @@ export default function AdminPage({ setPage }) {
     }
   }, []);
 
-  // Monitora a troca de abas para carregar apenas o necessário
   useEffect(() => {
     if (!user || user.access_level !== "docente") return;
 
@@ -75,14 +69,11 @@ export default function AdminPage({ setPage }) {
     }
   }, [activeTab, user, fetchProducts, fetchOrders]);
 
-  // Função disparada pelo Modal quando um produto é salvo com sucesso no Laravel
   const handleProductAdded = async (newProduct) => {
-    // Força uma busca limpa e fresca direto do banco de dados sincronizando a tabela
     await fetchProducts();
-    setIsModalOpen(false); // Fecha o modal com segurança após a atualização
+    setIsModalOpen(false);
   };
 
-  /* 🔒 Proteção de Acesso Restrito baseada no nível de acesso (docente) */
   if (!user || user.access_level !== "docente") {
     return (
       <div className="text-center py-20">
@@ -101,8 +92,6 @@ export default function AdminPage({ setPage }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-black text-gray-800">Painel Administrativo</h1>
@@ -115,25 +104,20 @@ export default function AdminPage({ setPage }) {
           ← Ir para loja
         </button>
       </div>
-
-      {/* Tabs */}
       <div className="flex gap-2 mb-8 border-b border-gray-200">
         {TABS.map(([t, label]) => (
           <button
             key={t}
             onClick={() => setActiveTab(t)}
-            className={`px-5 py-3 text-sm font-semibold transition-colors ${
-              activeTab === t
+            className={`px-5 py-3 text-sm font-semibold transition-colors ${activeTab === t
                 ? "border-b-2 border-blue-700 text-blue-700"
                 : "text-gray-400 hover:text-gray-600"
-            }`}
+              }`}
           >
             {label}
           </button>
         ))}
       </div>
-
-      {/* ABA 1: DASHBOARD */}
       {activeTab === "dashboard" && (
         <div>
           <AdminStats products={products} orders={orders} />
@@ -150,8 +134,6 @@ export default function AdminPage({ setPage }) {
           </div>
         </div>
       )}
-
-      {/* ABA 2: PRODUTOS */}
       {activeTab === "produtos" && (
         <div>
           <div className="flex justify-between items-center mb-4">
@@ -166,16 +148,12 @@ export default function AdminPage({ setPage }) {
           <ProductsTable products={products} />
         </div>
       )}
-
-      {/* ABA 3: PEDIDOS */}
       {activeTab === "pedidos" && (
         <div>
           <h2 className="text-xl font-bold text-gray-700 mb-4">Gerenciamento de Pedidos</h2>
           <OrdersTable orders={orders} />
         </div>
       )}
-
-      {/* RENDERIZAÇÃO DO MODAL */}
       {isModalOpen && (
         <AddProductModal
           onClose={() => setIsModalOpen(false)}

@@ -26,7 +26,6 @@ export default function AuthProvider({
       localStorage.getItem("user");
 
     if (token && savedUser) {
-
       setUser(
         JSON.parse(savedUser)
       );

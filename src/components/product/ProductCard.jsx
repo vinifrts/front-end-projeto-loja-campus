@@ -11,8 +11,7 @@ export default function ProductCard({ product, onView, onAdd }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => onView(product)}
->
-      {/* Imagem */}
+    >
       <div className="relative overflow-hidden bg-gray-50 aspect-square">
         <img
           src={product.image}
@@ -31,8 +30,6 @@ export default function ProductCard({ product, onView, onAdd }) {
           + Adicionar
         </button>
       </div>
-
-      {/* Info */}
       <div className="p-4">
         <p className="text-xs text-blue-600 font-medium mb-1">{product.category}</p>
         <h3 className="font-semibold text-gray-800 text-sm mb-1 truncate">{product.name}</h3>

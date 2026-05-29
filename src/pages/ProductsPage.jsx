@@ -41,14 +41,12 @@ export default function ProductsPage({
   const [sort, setSort] =
     useState("default");
 
-  // carregar categorias
   useEffect(() => {
 
     loadCategories();
 
   }, []);
 
-  // carregar produtos
   useEffect(() => {
 
     loadProducts();
@@ -138,30 +136,21 @@ export default function ProductsPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-
       <div className="mb-8">
-
         <h1 className="text-3xl font-black text-gray-800 mb-1">
           Produtos
         </h1>
-
         <p className="text-gray-400">
           {products.length}
           {" "}
           produtos encontrados
         </p>
-
       </div>
-
-      {/* Busca */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
-
         <div className="relative flex-1">
-
           <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
             <SearchIcon />
           </div>
-
           <input
             value={search}
             onChange={(e) =>
@@ -172,9 +161,7 @@ export default function ProductsPage({
             placeholder="Buscar produto..."
             className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl"
           />
-
         </div>
-
         <select
           value={sort}
           onChange={(e) =>
@@ -184,28 +171,19 @@ export default function ProductsPage({
           }
           className="border border-gray-200 rounded-xl px-4 py-3"
         >
-
           <option value="default">
             Ordenar por
           </option>
-
           <option value="price-asc">
             Menor preço
           </option>
-
           <option value="price-desc">
             Maior preço
           </option>
-
         </select>
-
       </div>
-
-      {/* Categorias */}
       <div className="flex gap-2 flex-wrap mb-8">
-
         {categories.map((c) => (
-
           <button
             key={c}
             onClick={() =>
@@ -219,22 +197,14 @@ export default function ProductsPage({
             {c}
           </button>
         ))}
-
       </div>
-
-      {/* Loading */}
       {loading ? (
-
         <div className="text-center py-20">
           Carregando produtos...
         </div>
-
       ) : (
-
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-
           {products.map((product) => (
-
             <ProductCard
               key={product.id}
               product={product}
@@ -242,10 +212,8 @@ export default function ProductsPage({
               onAdd={handleAdd}
             />
           ))}
-
         </div>
       )}
-
     </div>
   );
 }

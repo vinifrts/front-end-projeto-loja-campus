@@ -8,7 +8,6 @@ const COLOR_MAP = {
 };
 
 export default function AdminStats({ products = [], orders = [] }) {
-  // Calcula a receita total real iterando pela sua lista de pedidos dinâmicos da API
   const totalRevenue = orders.reduce((acc, curr) => acc + (parseFloat(curr.total) || 0), 0);
 
   const statsList = [

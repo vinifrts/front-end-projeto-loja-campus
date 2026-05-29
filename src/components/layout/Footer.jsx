@@ -21,11 +21,8 @@ export default function Footer({ setPage }) {
     <footer className="bg-blue-950 text-white">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-
-          {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              {/* Box da logo integrado com a identidade visual */}
               <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center overflow-hidden border border-white/10">
                 <img src="/lgunifor-azul.png" alt="Unifor Logo" className="h-7 w-auto object-contain brightness-0 invert" />
               </div>
@@ -37,13 +34,10 @@ export default function Footer({ setPage }) {
                 <div className="text-[10px] text-blue-300 font-medium tracking-wide uppercase mt-0.5">Universidade de Fortaleza</div>
               </div>
             </div>
-            
-            {/* Correção gramatical realizada aqui: "no próprio campus" */}
             <p className="text-blue-200 text-sm leading-relaxed max-w-xs">
               A loja oficial da Unifor. Produtos com identidade universitária,
               qualidade premium e entrega no próprio campus.
             </p>
-            
             <div className="flex gap-3 mt-5">
               {SOCIAL_ICONS.map((Icon, i) => (
                 <button
@@ -55,8 +49,6 @@ export default function Footer({ setPage }) {
               ))}
             </div>
           </div>
-
-          {/* Loja */}
           <div>
             <h4 className="font-bold mb-4 text-blue-400 text-xs uppercase tracking-wider">
               Loja
@@ -74,8 +66,6 @@ export default function Footer({ setPage }) {
               ))}
             </ul>
           </div>
-
-          {/* Suporte */}
           <div>
             <h4 className="font-bold mb-4 text-blue-400 text-xs uppercase tracking-wider">
               Suporte

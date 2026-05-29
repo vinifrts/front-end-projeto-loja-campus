@@ -126,18 +126,13 @@ export default function ProductPage({
             </p>
             {product.sizes?.[0] !==
               "Único" && (
-
                 <div className="mb-6">
-
                   <p className="text-sm font-semibold text-gray-700 mb-2">
                     Tamanho
                   </p>
-
                   <div className="flex gap-2 flex-wrap">
-
                     {product.sizes?.map(
                       (s) => (
-
                         <button
                           key={s}
                           onClick={() =>
@@ -152,21 +147,14 @@ export default function ProductPage({
                         </button>
                       )
                     )}
-
                   </div>
-
                 </div>
               )}
-
-            {/* Quantidade */}
             <div className="mb-6">
-
               <p className="text-sm font-semibold text-gray-700 mb-2">
                 Quantidade
               </p>
-
               <div className="flex items-center gap-3">
-
                 <button
                   onClick={() =>
                     setQty((q) =>
@@ -180,11 +168,9 @@ export default function ProductPage({
                 >
                   <MinusIcon />
                 </button>
-
                 <span className="text-lg font-bold w-8 text-center">
                   {qty}
                 </span>
-
                 <button
                   onClick={() =>
                     setQty(
@@ -195,33 +181,23 @@ export default function ProductPage({
                 >
                   <PlusIcon />
                 </button>
-
               </div>
-
             </div>
-
           </div>
-
-          {/* Preço */}
           <div>
-
             <div className="mb-5">
-
               <p className="text-4xl font-black text-blue-900">
                 {formatPrice(
                   product.price
                 )}
               </p>
-
               <p className="text-sm text-gray-400">
                 {formatInstallment(
                   product.price,
                   3
                 )}
               </p>
-
             </div>
-
             <button
               onClick={handleAdd}
               className={`w-full py-4 rounded-2xl font-bold text-lg transition-all shadow-lg ${added
@@ -233,26 +209,16 @@ export default function ProductPage({
                 ? "✓ Adicionado ao Carrinho!"
                 : "Adicionar ao Carrinho"}
             </button>
-
           </div>
-
         </div>
-
       </div>
-
-      {/* Relacionados */}
       {related.length > 0 && (
-
         <div>
-
           <h2 className="text-xl font-black text-gray-800 mb-6">
             Você também pode gostar
           </h2>
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-
             {related.map((p) => (
-
               <ProductCard
                 key={p.id}
                 product={p}
@@ -267,12 +233,9 @@ export default function ProductPage({
                 }
               />
             ))}
-
           </div>
-
         </div>
       )}
-
     </div>
   );
 }

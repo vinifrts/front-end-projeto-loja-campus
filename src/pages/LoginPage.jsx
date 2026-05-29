@@ -100,25 +100,18 @@ export default function LoginPage({ setPage }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 to-blue-800 flex items-center justify-center px-4 py-16">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
-
-        {/* Header */}
         <div className="bg-blue-900 p-6 text-center">
-
           <div className="w-28 h-20 overflow-hidden flex items-center justify-center mx-auto mb-3">
             <img src="/lgunifor-branca.png" alt="Unifor" className="h-20 w-auto object-contain scale-110"
             />
           </div>
-
           <h1 className="text-white font-black text-xl">
             Lojinha Campus Unifor
           </h1>
-
           <p className="text-blue-300 text-sm">
             Acesse sua conta
           </p>
         </div>
-
-        {/* Tabs */}
         <div className="flex border-b border-gray-100">
           {["login", "cadastro"].map((t) => (
             <button
@@ -133,7 +126,6 @@ export default function LoginPage({ setPage }) {
             </button>
           ))}
         </div>
-
         <div className="p-8">
           {tab === "login" ? (
             <>

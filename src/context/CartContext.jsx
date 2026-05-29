@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from "react";
-import { apiFetch } from "../services/api"; // Usando o seu padrão apiFetch
+import { apiFetch } from "../services/api";
 
 export const CartContext = createContext(null);
 
@@ -8,7 +8,6 @@ export default function CartProvider({ children }) {
   const [total, setTotal] = useState(0);
   const [loadingCart, setLoadingCart] = useState(false);
 
-  // Busca o carrinho do Laravel
   const fetchCart = useCallback(async () => {
     setLoadingCart(true);
     try {
@@ -30,7 +29,6 @@ export default function CartProvider({ children }) {
 
   const add = async (product, size, qty = 1) => {
     try {
-      // Rota real do seu back-end: POST /cart/items
       await apiFetch("/cart/items", {
         method: "POST",
         body: JSON.stringify({
@@ -50,7 +48,6 @@ export default function CartProvider({ children }) {
     if (!targetItem) return;
 
     try {
-      // Rota real do seu back-end: DELETE /cart/items/{item}
       await apiFetch(`/cart/items/${targetItem.id}`, { method: "DELETE" });
       await fetchCart();
     } catch (error) {
@@ -68,7 +65,6 @@ export default function CartProvider({ children }) {
     }
 
     try {
-      // Rota real do seu back-end: PUT /cart/items/{item}
       await apiFetch(`/cart/items/${targetItem.id}`, {
         method: "PUT",
         body: JSON.stringify({ amount: qty })
@@ -81,7 +77,6 @@ export default function CartProvider({ children }) {
 
   const clear = async () => {
     try {
-      // Rota real do seu back-end: DELETE /cart/clear
       await apiFetch("/cart/clear", { method: "DELETE" });
       setItems([]);
       setTotal(0);

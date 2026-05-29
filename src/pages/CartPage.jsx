@@ -19,7 +19,6 @@ export default function CartPage({ setPage }) {
     setLoading(true);
     setErrorMessage("");
     try {
-      // Enviamos mapeado exatamente com os nomes que o Laravel espera no Request
       const response = await createCheckout({
         type_delivery: deliveryType,
         type_payment: paymentType
@@ -28,8 +27,7 @@ export default function CartPage({ setPage }) {
       if (response.success) {
         setBackendOrderId(response.data.id);
         setCheckoutSuccess(true);
-        // O clear() local/remoto limpa os estados do carrinho pós-venda
-        clear(); 
+        clear();
       }
     } catch (error) {
       console.error(error);
@@ -135,7 +133,6 @@ export default function CartPage({ setPage }) {
             </div>
           ))}
 
-          {/* Opções de Entrega e Pagamento */}
           <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4">
             <h3 className="font-bold text-gray-800 text-md">Opções de Envio e Pagamento</h3>
 
@@ -167,8 +164,6 @@ export default function CartPage({ setPage }) {
             </div>
           </div>
         </div>
-
-        {/* Resumo lateral */}
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm h-fit sticky top-24">
           <h2 className="font-black text-gray-800 mb-5 text-lg">Resumo do Pedido</h2>
           <div className="space-y-3 text-sm mb-5">

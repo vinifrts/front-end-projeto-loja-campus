@@ -10,7 +10,6 @@ const STATS = [
 export default function SobrePage({ setPage }) {
   return (
     <div>
-      {/* Hero */}
       <div className="bg-gradient-to-br from-blue-950 to-blue-800 py-20 text-center text-white px-4">
         <h1 className="text-4xl font-black mb-4">Sobre a Lojinha Campus</h1>
         <p className="text-blue-200 max-w-xl mx-auto text-lg">
@@ -18,8 +17,6 @@ export default function SobrePage({ setPage }) {
           através de produtos de qualidade.
         </p>
       </div>
-
-      {/* Conteúdo */}
       <div className="max-w-5xl mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
           <div>
@@ -34,7 +31,6 @@ export default function SobrePage({ setPage }) {
               produto represente dignamente o orgulho de ser Unifor.
             </p>
           </div>
-
           <div className="grid grid-cols-2 gap-4">
             {STATS.map(([emoji, label, value]) => (
               <div key={label} className="bg-blue-50 rounded-2xl p-5 text-center">

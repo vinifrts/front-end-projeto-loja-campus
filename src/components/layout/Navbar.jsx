@@ -33,57 +33,47 @@ export default function Navbar({ setPage, currentPage }) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-md" : "bg-white/95 backdrop-blur-sm"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white/95 backdrop-blur-sm"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          <button onClick={() => nav("home")} className="flex items-center gap-2">
+            <div className="w-26 h-20 overflow-hidden flex items-center justify-center">
+              <img
+                src="/lgunifor-azul.png"
+                alt="Unifor"
+                className="h-20 w-auto object-contain scale-110"
+              />
+            </div>
+            <div className="hidden sm:block">
+              <span className="font-black text-blue-900 text-lg leading-none">
+                Lojinha
+              </span>
 
-          
-          {/* Logo */}
-<button onClick={() => nav("home")} className="flex items-center gap-2">
-  <div className="w-26 h-20 overflow-hidden flex items-center justify-center">
-  <img
-    src="/lgunifor-azul.png"
-    alt="Unifor"
-    className="h-20 w-auto object-contain scale-110"
-  />
-</div>
+              <span className="text-blue-500 font-black text-lg leading-none">
+                {" "}Campus
+              </span>
 
-  <div className="hidden sm:block">
-    <span className="font-black text-blue-900 text-lg leading-none">
-      Lojinha
-    </span>
-
-    <span className="text-blue-500 font-black text-lg leading-none">
-      {" "}Campus
-    </span>
-
-    <div className="text-xs text-gray-400 font-medium leading-none">
-      Unifor
-    </div>
-  </div>
-</button>
-
-          {/* Desktop Nav */}
+              <div className="text-xs text-gray-400 font-medium leading-none">
+                Unifor
+              </div>
+            </div>
+          </button>
           <nav className="hidden md:flex items-center gap-6">
             {NAV_LINKS.map(([p, label]) => (
               <button
                 key={p}
                 onClick={() => nav(p)}
-                className={`text-sm font-medium capitalize transition-colors ${
-                  currentPage === p
+                className={`text-sm font-medium capitalize transition-colors ${currentPage === p
                     ? "text-blue-700 font-semibold"
                     : "text-gray-600 hover:text-blue-700"
-                }`}
+                  }`}
               >
                 {label}
               </button>
             ))}
           </nav>
-
-          {/* Right actions */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => nav("produtos")}
@@ -120,8 +110,6 @@ export default function Navbar({ setPage, currentPage }) {
                 <span>Entrar</span>
               </button>
             )}
-
-            {/* Cart button */}
             <button
               onClick={() => nav("cart")}
               className="relative bg-blue-900 hover:bg-blue-700 text-white p-2.5 rounded-xl transition-colors"
@@ -133,8 +121,6 @@ export default function Navbar({ setPage, currentPage }) {
                 </span>
               )}
             </button>
-
-            {/* Mobile menu toggle */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="md:hidden p-2 text-gray-600"
@@ -143,8 +129,6 @@ export default function Navbar({ setPage, currentPage }) {
             </button>
           </div>
         </div>
-
-        {/* Mobile menu */}
         {menuOpen && (
           <div className="md:hidden pb-4 border-t border-gray-100 pt-4 space-y-2">
             {NAV_LINKS.map(([p, label]) => (
